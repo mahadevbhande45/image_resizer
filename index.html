@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Image Compressor</title>
+<style>
+  :root {
+    --main-color: #007bff;
+    --bg-color: #000;
+    --text-color: #fff;
+    --card-bg: #1a1a1a;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+
+  /* 🌍 Language Selector */
+  .lang-select {
+    position: fixed;
+    top: 10px;
+    right: 12px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    padding: 5px 8px;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.15);
+    z-index: 999;
+  }
+
+  select {
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 3px 5px;
+    font-size: 12px;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  header {
+    background: var(--main-color);
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+
+  .card {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+    width: 95%;
+    max-width: 750px;
+    text-align: center;
+  }
+
+  input[type="file"] {
+    margin: 15px 0;
+    padding: 10px;
+    color: #fff;
+  }
+
+  input[type="range"] {
+    width: 80%;
+  }
+
+  button {
+    background: var(--main-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin: 5px;
+  }
+
+  button:hover {
+    background: #0056cc;
+  }
+
+  img {
+    max-width: 280px;
+    border-radius: 8px;
+    margin: 10px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .info {
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+
+  section {
+    background: var(--card-bg);
+    margin: 2rem auto;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+    padding: 1.5rem;
+  }
+
+  footer {
+    background: #111;
+    color: #ccc;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  footer a {
+    color: #4fa3ff;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 🌍 Language Selector -->
+  <div class="lang-select">
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">🌐 English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+    </select>
+  </div>
+
+  <header>
+    <h1 id="title">Smart Image Compressor</h1>
+    <p id="desc">Compress images Reduce the file size of your images with online image compression. Compress image files quickly without software installation.</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2 id="uploadTitle">Upload and Compress</h2>
+
+      <input type="file" id="imageInput" accept="image/*"><br>
+      <label id="qualityLabel">Compression Quality:</label><br>
+      <input type="range" id="quality" min="10" max="100" value="70">
+      <span id="qualityValue">70%</span><br><br>
+
+      <button onclick="compressImage()" id="compressBtn">Compress Image</button>
+      <button onclick="clearAll()" id="clearBtn">Clear Queue</button>
+
+      <div id="preview"></div>
+    </div>
+  </main>
+
+  <section>
+    <h2 id="howTitle">📋 How to Use</h2>
+    <ol id="howSteps">
+      <li>Click “Choose File” to upload your image (JPG/PNG).</li>
+      <li>Move the slider to adjust compression quality (lower = smaller size).</li>
+      <li>Click “Compress Image” to process instantly in your browser.</li>
+      <li>Download the new compressed image and check size reduction.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2 id="privacyTitle">🔒 Privacy Policy</h2>
+    <p id="privacy1">All processing happens directly in your browser. No images are uploaded to any server. Your files remain private on your device.</p>
+    <p id="privacy2">There is no need to be worried about the safety of our free service. Your original files will stay untouched on your system, so if you are unhappy with your compressed files, you can simply try again. Also, our unmanned system purges all data after one hour, so you don’t need to worry about the security of your data.</p>
+  </section>
+
+  <section>
+    <h2 id="aboutTitle">ℹ About This Tool</h2>
+    <p id="aboutDesc">This is a lightweight offline image compressor built using HTML, CSS, and JavaScript. It uses the HTML5 Canvas API to reduce image size without any external libraries.</p>
+  </section>
+
+  <footer>
+    <p>© 2025 Smart Image Compressor | Made for educational purposes</p>
+    <p>Created by: <a href="https://www.linkedin.com/in/mahadev-bhande-20b6a3378/" target="_blank">Mahadev Bhande</a></p>
+    <p><a href="#">Terms of Use</a> | <a href="#">Privacy</a> | <a href="#">Contact</a></p>
+  </footer>
+
+  <script>
+    const qualityInput = document.getElementById('quality');
+    const qualityValue = document.getElementById('qualityValue');
+    const preview = document.getElementById('preview');
+    const fileInput = document.getElementById('imageInput');
+
+    qualityInput.oninput = () => qualityValue.textContent = qualityInput.value + '%';
+
+    function formatSize(bytes) {
+      return (bytes / 1024).toFixed(2) + ' KB';
+    }
+
+    function compressImage() {
+      const file = fileInput.files[0];
+      if (!file) return alert("Please upload an image first!");
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = e => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          const q = qualityInput.value / 100;
+          const compressedData = canvas.toDataURL('image/jpeg', q);
+
+          const originalSize = file.size;
+          const compressedSize = Math.round(compressedData.length * 3 / 4);
+
+          preview.innerHTML = `
+            <div class="row">
+              <div>
+                <h3>Original Image</h3>
+                <img src="${img.src}">
+                <div class="info">Size: ${formatSize(originalSize)}</div>
+              </div>
+              <div>
+                <h3>Compressed Image</h3>
+                <img src="${compressedData}">
+                <div class="info">Size: ${formatSize(compressedSize)}</div>
+                <div class="info">Compression Ratio: ${(originalSize / compressedSize).toFixed(2)} : 1</div>
+                <br><a href="${compressedData}" download="compressed.jpg">
+                  <button>⬇ Download Image</button>
+                </a>
+              </div>
+            </div>
+          `;
+        };
+      };
+    }
+
+    function clearAll() {
+      fileInput.value = "";
+      preview.innerHTML = "";
+      qualityInput.value = 70;
+      qualityValue.textContent = "70%";
+    }
+
+    const translations = {
+      hi: {
+        title: "स्मार्ट इमेज कम्प्रेसर",
+        desc: "छवियों को आसानी से संपीड़ित करें — तेज़, सुरक्षित और ऑफलाइन।",
+        uploadTitle: "अपलोड करें और संपीड़ित करें",
+        qualityLabel: "संपीड़न गुणवत्ता:",
+        compressBtn: "छवि संपीड़ित करें",
+        clearBtn: "सभी साफ करें",
+        howTitle: "📋 उपयोग करने का तरीका",
+        privacyTitle: "🔒 गोपनीयता नीति",
+        aboutTitle: "ℹ इस टूल के बारे में",
+      },
+      es: {
+        title: "Compresor de Imágenes Inteligente",
+        desc: "Comprime imágenes fácilmente: rápido, seguro y sin conexión.",
+        uploadTitle: "Subir y Comprimir",
+        qualityLabel: "Calidad de Compresión:",
+        compressBtn: "Comprimir Imagen",
+        clearBtn: "Borrar Todo",
+        howTitle: "📋 Cómo Usar",
+        privacyTitle: "🔒 Política de Privacidad",
+        aboutTitle: "ℹ Sobre Esta Herramienta",
+      },
+      fr: {
+        title: "Compresseur d'Images Intelligent",
+        desc: "Compressez vos images facilement — rapide, sécurisé et hors ligne.",
+        uploadTitle: "Téléverser et Compresser",
+        qualityLabel: "Qualité de Compression:",
+        compressBtn: "Compresser l'image",
+        clearBtn: "Tout Effacer",
+        howTitle: "📋 Comment Utiliser",
+        privacyTitle: "🔒 Politique de Confidentialité",
+        aboutTitle: "ℹ À propos de cet outil",
+      },
+      de: {
+        title: "Intelligenter Bildkompressor",
+        desc: "Bilder einfach komprimieren – schnell, sicher und offline.",
+        uploadTitle: "Hochladen und Komprimieren",
+        qualityLabel: "Komprimierungsqualität:",
+        compressBtn: "Bild Komprimieren",
+        clearBtn: "Alles Löschen",
+        howTitle: "📋 So verwenden Sie es",
+        privacyTitle: "🔒 Datenschutzrichtlinie",
+        aboutTitle: "ℹ Über Dieses Tool",
+      },
+    };
+
+    function changeLanguage() {
+      const lang = document.getElementById('languageSelect').value;
+      const t = translations[lang] || {};
+
+      for (let key in t) {
+        const el = document.getElementById(key);
+        if (el) el.textContent = t[key];
+      }
+    }
+  </script>
+</body>
+</html>
+
+    
